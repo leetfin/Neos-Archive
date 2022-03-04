@@ -1,0 +1,2363 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>NeosVR - Neos User Created Content</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+
+    <style>
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-300.woff);
+            font-weight: 300;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-400.woff);
+            font-weight: 400;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-500.woff);
+            font-weight: 500;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-600.woff);
+            font-weight: 600;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-700.woff);
+            font-weight: 700;
+        }
+
+        body {
+            background-color: #36393e;
+            color: #dcddde;
+            font-family: "Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 17px;
+            font-weight: 400;
+        }
+
+        a {
+            color: #00aff4;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        img {
+            object-fit: contain;
+        }
+
+        .markdown {
+            max-width: 100%;
+            line-height: 1.3;
+            overflow-wrap: break-word;
+        }
+
+        .preserve-whitespace {
+            white-space: pre-wrap;
+        }
+
+        .spoiler-text {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .spoiler-text--hidden {
+            cursor: pointer;
+            background-color: #202225;
+            color: rgba(0, 0, 0, 0);
+        }
+
+        .spoiler-text--hidden:hover {
+            background-color: rgba(32, 34, 37, 0.8);
+        }
+
+        .spoiler-text--hidden::selection {
+            color: rgba(0, 0, 0, 0);
+        }
+
+        .quote {
+            display: flex;
+            margin: 0.05em 0;
+        }
+
+        .quote::before {
+            content: "";
+            margin-right: 0.5em;
+            border: 2px solid #4f545c;
+            border-radius: 3px;
+        }
+
+        .pre {
+            background-color: #2f3136;
+            font-family: "Consolas", "Courier New", Courier, monospace;
+        }
+
+        .pre--multiline {
+            margin-top: 0.25em;
+            padding: 0.5em;
+            border: 2px solid #282b30;
+            border-radius: 5px;
+            color: #b9bbbe;
+        }
+
+        .pre--multiline.hljs {
+            background-color: #2f3136;
+            color: #b9bbbe;
+        }
+
+        .pre--inline {
+            padding: 2px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+
+        .mention {
+            border-radius: 3px;
+            padding: 0 2px;
+            color: #dee0fc;
+            background-color: rgba(88, 101, 242, .3);
+            font-weight: 500;
+        }
+
+        .mention:hover {
+            background-color: #5865f2;
+            color: #ffffff
+        }
+
+        .timestamp {
+            border-radius: 3px;
+            padding: 0 2px;
+            background-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .emoji {
+            width: 1.325em;
+            height: 1.325em;
+            margin: 0 0.06em;
+            vertical-align: -0.4em;
+        }
+
+        .emoji--small {
+            width: 1em;
+            height: 1em;
+        }
+
+        .emoji--large {
+            width: 2.8em;
+            height: 2.8em;
+        }
+
+        .preamble {
+            display: grid;
+            margin: 0 0.3em 0.6em 0.3em;
+            max-width: 100%;
+            grid-template-columns: auto 1fr;
+        }
+
+        .preamble__guild-icon-container {
+            grid-column: 1;
+        }
+
+        .preamble__guild-icon {
+            max-width: 88px;
+            max-height: 88px;
+        }
+
+        .preamble__entries-container {
+            grid-column: 2;
+            margin-left: 0.6em;
+        }
+
+        .preamble__entry {
+            font-size: 1.4em;
+            color: #ffffff;
+        }
+
+        .preamble__entry--small {
+            font-size: 1em;
+        }
+
+        .chatlog {
+            max-width: 100%;
+        }
+
+        .chatlog__message-group {
+            display: grid;
+            margin: 0 0.6em;
+            padding: 0.9em 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            grid-template-columns: auto 1fr;
+        }
+
+        .chatlog__reference-symbol {
+            grid-column: 1;
+            margin: 8px 4px 4px 18px;
+            border-left: 2px solid #4f545c;
+            border-top: 2px solid #4f545c;
+            border-radius: 8px 0 0 0;
+        }
+
+        .chatlog__reference {
+            display: flex;
+            grid-column: 2;
+            margin-bottom: 0.25em;
+            font-size: 0.875em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            align-items: center;
+            color: #b5b6b8;
+        }
+
+        .chatlog__reference-avatar {
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            margin-right: 0.25em;
+        }
+
+        .chatlog__reference-name {
+            margin-right: 0.3em;
+            font-weight: 600;
+        }
+
+        .chatlog__reference-content {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chatlog__reference-content a:hover {
+            text-decoration: none;
+        }
+
+        .chatlog__reference-link {
+            cursor: pointer;
+            color: #b5b6b8;
+        }
+
+        .chatlog__reference-link * {
+            display: inline;
+            pointer-events: none;
+        }
+
+        .chatlog__reference-link:hover {
+            color: #ffffff;
+        }
+
+        .chatlog__reference-link:hover *:not(.spoiler-text) {
+            color: #ffffff;
+        }
+
+        .chatlog__reference-edited-timestamp {
+            margin-left: 0.25em;
+            font-size: 0.8em;
+            unicode-bidi: bidi-override;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatlog__author-avatar-container {
+            grid-column: 1;
+            width: 40px;
+            height: 40px;
+            margin-right: 16px;
+        }
+
+        .chatlog__author-avatar {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+        }
+
+        .chatlog__messages {
+            grid-column: 2;
+            min-width: 50%;
+            direction: ltr;
+        }
+
+        .chatlog__author-name {
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .chatlog__timestamp {
+            margin-left: 0.3em;
+            font-size: 0.75em;
+            direction: ltr;
+            unicode-bidi: bidi-override;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatlog__message {
+            padding: 0.1em 0.3em;
+            margin: 0 -0.3em;
+            background-color: transparent;
+            transition: background-color 1s ease;
+        }
+
+        .chatlog__message--highlighted {
+            background-color: rgba(114, 137, 218, 0.2);
+        }
+
+        .chatlog__message--pinned {
+            background-color: rgba(249, 168, 37, 0.05);
+        }
+
+        .chatlog__content {
+            font-size: 0.95em;
+            word-wrap: break-word;
+        }
+
+        .chatlog__edited-timestamp {
+            margin-left: 0.15em;
+            font-size: 0.8em;
+        }
+
+        .chatlog__attachment {
+            display: inline-block;
+            position: relative;
+            margin-top: 0.3em;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .chatlog__attachment--hidden {
+            cursor: pointer;
+            box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .chatlog__attachment--hidden * {
+            pointer-events: none;
+        }
+
+        .chatlog__attachment-spoiler-caption {
+            display: none;
+            z-index: 999;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: 0.4em 0.8em;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 20px;
+            color: #dcddde;
+            font-size: 0.9em;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .chatlog__attachment--hidden .chatlog__attachment-spoiler-caption {
+            display: block;
+        }
+
+        .chatlog__attachment--hidden:hover .chatlog__attachment-spoiler-caption {
+            color: #fff;
+        }
+
+        .chatlog__attachment-media {
+            vertical-align: top;
+            max-width: 45vw;
+            max-height: 500px;
+            border-radius: 3px;
+        }
+
+        .chatlog__attachment--hidden .chatlog__attachment-media {
+            filter: blur(44px);
+        }
+
+        .chatlog__attachment-generic {
+            width: 100%;
+            max-width: 520px;
+            height: 40px;
+            padding: 10px;
+            background-color: #2f3136;
+            border: 1px solid #292b2f;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .chatlog__attachment--hidden .chatlog__attachment-generic {
+            filter: blur(44px);
+        }
+
+        .chatlog__attachment-generic-icon {
+            float: left;
+            width: 30px;
+            height: 100%;
+            margin-right: 10px;
+        }
+
+        .chatlog__attachment-generic-size {
+            color: #72767d;
+            font-size: 12px;
+        }
+
+        .chatlog__attachment-generic-name {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .chatlog__edited-timestamp {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatlog__embed {
+            display: flex;
+            margin-top: 0.3em;
+            max-width: 520px;
+        }
+
+        .chatlog__embed-color-pill {
+            flex-shrink: 0;
+            width: 0.25em;
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+        }
+
+        .chatlog__embed-color-pill--default {
+            background-color: #202225;
+        }
+
+        .chatlog__embed-content-container {
+            display: flex;
+            flex-direction: column;
+            padding: 0.5em 0.6em;
+            background-color: rgba(46, 48, 54, 0.3);
+            border: 1px solid rgba(46, 48, 54, 0.6);
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+
+        .chatlog__embed-content {
+            display: flex;
+            width: 100%;
+        }
+
+        .chatlog__embed-text {
+            flex: 1;
+        }
+
+        .chatlog__embed-author {
+            display: flex;
+            margin-bottom: 0.3em;
+            align-items: center;
+        }
+
+        .chatlog__embed-author-icon {
+            margin-right: 0.5em;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .chatlog__embed-author-name {
+            font-size: 0.875em;
+            font-weight: 600;
+            direction: ltr;
+            unicode-bidi: bidi-override;
+            color: #ffffff
+        }
+
+        .chatlog__embed-author-name-link {
+            color: #ffffff;
+        }
+
+        .chatlog__embed-title {
+            margin-bottom: 0.2em;
+            font-size: 0.875em;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .chatlog__embed-description {
+            font-weight: 500;
+            font-size: 0.85em;
+            color: #dcddde;
+        }
+
+        .chatlog__embed-fields {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0 0.5em;
+        }
+
+        .chatlog__embed-field {
+            flex: 0;
+            min-width: 100%;
+            max-width: 506px;
+            padding-top: 0.6em;
+            font-size: 0.875em;
+        }
+
+        .chatlog__embed-field--inline {
+            flex: 1;
+            flex-basis: auto;
+            min-width: 150px;
+        }
+
+        .chatlog__embed-field-name {
+            margin-bottom: 0.2em;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .chatlog__embed-field-value {
+            font-weight: 500;
+            color: #dcddde;
+        }
+
+        .chatlog__embed-thumbnail {
+            flex: 0;
+            margin-left: 1.2em;
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 3px;
+        }
+
+        .chatlog__embed-image-container {
+            margin-top: 0.6em;
+        }
+
+        .chatlog__embed-image {
+            max-width: 500px;
+            max-height: 400px;
+            border-radius: 3px;
+        }
+
+        .chatlog__embed-footer {
+            margin-top: 0.6em;
+            color: #dcddde;
+        }
+
+        .chatlog__embed-footer-icon {
+            margin-right: 0.2em;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+
+        .chatlog__embed-footer-text {
+            vertical-align: middle;
+            font-size: 0.75em;
+            font-weight: 500;
+        }
+
+        .chatlog__embed-plainimage {
+            vertical-align: top;
+            max-width: 45vw;
+            max-height: 500px;
+            border-radius: 3px;
+        }
+
+        .chatlog__embed-spotify {
+            border: 0;
+        }
+
+        .chatlog__embed-youtube-container {
+            margin-top: 0.6em;
+        }
+
+        .chatlog__embed-youtube {
+            border: 0;
+            border-radius: 3px;
+        }
+
+        .chatlog__reactions {
+            display: flex;
+        }
+
+        .chatlog__reaction {
+            display: flex;
+            align-items: center;
+            margin: 0.35em 0.1em 0.1em 0;
+            padding: .125rem .375rem;
+            background-color: #2f3136;
+            border-radius: 8px;
+            border-color: transparent;
+            border-width: 1px;
+            border-style: solid;
+        }
+
+        .chatlog__reaction:hover {
+            border-color: hsla(0,0%,100%,.2);
+            border-width: 1px;
+            border-style: solid;
+            background-color: transparent;
+        }
+
+        .chatlog__reaction-count {
+            min-width: 9px;
+            margin-left: 0.35em;
+            font-size: 0.875em;
+            color: #b9bbbe;
+        }
+
+        .chatlog__reaction:hover .chatlog__reaction-count {
+            color: #dcddde;
+        }
+
+        .chatlog__bot-tag {
+            position: relative;
+            top: -.1em;
+            margin-left: 0.3em;
+            padding: 0.05em 0.3em;
+            border-radius: 3px;
+            line-height: 1.3;
+            background-color: #5865F2;
+            color: #ffffff;
+            font-size: 0.625em;
+            font-weight: 500;
+        }
+
+        .postamble {
+            margin: 1.4em 0.3em 0.6em 0.3em;
+            padding: 1em;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .postamble__entry {
+            color: #ffffff;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/solarized-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.pre--multiline').forEach(block => hljs.highlightBlock(block));
+        });
+    </script>
+
+    <script>
+        function scrollToMessage(event, id) {
+            var element = document.getElementById('message-' + id);
+
+            if (element) {
+                event.preventDefault();
+
+                element.classList.add('chatlog__message--highlighted');
+
+                window.scrollTo({
+                    top: element.getBoundingClientRect().top - document.body.getBoundingClientRect().top - (window.innerHeight / 2),
+                    behavior: 'smooth'
+                });
+
+                window.setTimeout(function() {
+                    element.classList.remove('chatlog__message--highlighted');
+                }, 2000);
+            }
+        }
+
+        function showSpoiler(event, element) {
+            if (element && element.classList.contains('spoiler-text--hidden')) {
+                event.preventDefault();
+                element.classList.remove('spoiler-text--hidden');
+            }
+            if (element && element.classList.contains('chatlog__attachment--hidden')) {
+                event.preventDefault();
+                element.classList.remove('chatlog__attachment--hidden');
+            }
+        }
+    </script>
+
+    <svg style="display: none">
+        <symbol id="icon-attachment" viewBox="0 0 720 960">
+            <path fill="#f4f5fb" d="M50,935a25,25,0,0,1-25-25V50A25,25,0,0,1,50,25H519.6L695,201.32V910a25,25,0,0,1-25,25Z" />
+            <path fill="#7789c4" d="M509.21,50,670,211.63V910H50V50H509.21M530,0H50A50,50,0,0,0,0,50V910a50,50,0,0,0,50,50H670a50,50,0,0,0,50-50h0V191Z" />
+            <path fill="#f4f5fb" d="M530,215a25,25,0,0,1-25-25V50a25,25,0,0,1,16.23-23.41L693.41,198.77A25,25,0,0,1,670,215Z" />
+            <path fill="#7789c4" d="M530,70.71,649.29,190H530V70.71M530,0a50,50,0,0,0-50,50V190a50,50,0,0,0,50,50H670a50,50,0,0,0,50-50Z" />
+        </symbol>
+    </svg>
+</head>
+<body>
+
+<div class="preamble">
+    <div class="preamble__guild-icon-container">
+        <img class="preamble__guild-icon" src="https://cdn.discordapp.com/icons/402159838827905024/a_867f39521ebabab5441736b08d31cabf.png" alt="Guild icon" loading="lazy">
+    </div>
+    <div class="preamble__entries-container">
+        <div class="preamble__entry">NeosVR</div>
+        <div class="preamble__entry">&#128178;neos-credits-ncr / Neos User Created Content</div>
+
+
+    </div>
+</div>
+
+<div class="chatlog">
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="https://cdn.discordapp.com/embed/avatars/4.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Climber56#1099" style="">Climber56</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;914531722509565981&#39;)">
+so development wise it is further than sand and MANA?                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/174570823170916353/fb38197a109d7bf3d5d63562907b2d8a.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Mysticporo#9556" data-user-id="174570823170916353" style="color: rgb(159,213,80)">Mysticporo</span>
+
+
+        <span class="chatlog__timestamp">28-Nov-21 11:08 AM</span>
+
+            <div class="chatlog__message " data-message-id="914548357815476244" id="message-914548357815476244" title="Message sent: 28-Nov-21 11:08 AM">
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="914548398881918997" id="message-914548398881918997" title="Message sent: 28-Nov-21 11:08 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I wanted to share some pieces of media that shows off Neos and the player bases creativity for everybody who’s investing for those who can’t jump into Neos and play for themself,
+feel free to add to the list.
+
+Video by June 
+- <a href="https://www.youtube.com/watch?v=g-YLw77l4xE">https://www.youtube.com/watch?v=g-YLw77l4xE</a>
+
+Gunngame made by Gunnar0 
+- <a href="https://twitter.com/Gunn__0/status/1443784244485001234?s=20">https://twitter.com/Gunn__0/status/1443784244485001234?s=20</a>
+
+PV Video by Orange 
+- <a href="https://twitter.com/mikan3134/status/1403910244225503234">https://twitter.com/mikan3134/status/1403910244225503234</a>
+
+Brain scan showcase 
+- <a href="https://twitter.com/jungleincxrp/status/1462537326672809984">https://twitter.com/jungleincxrp/status/1462537326672809984</a>
+
+By chainlinkquest 
+- <a href="https://twitter.com/ChainlinkQuant/status/1464212801644216325">https://twitter.com/ChainlinkQuant/status/1464212801644216325</a>
+
+both videos by Mystic Forge
+-  <a href="https://www.youtube.com/watch?v=sHQZnKDioyI">https://www.youtube.com/watch?v=sHQZnKDioyI</a>
+- <a href="https://www.youtube.com/watch?v=ZLEaf3YwJy8">https://www.youtube.com/watch?v=ZLEaf3YwJy8</a>
+
+Those are just a few awesome videos, personally why I also love Neos
+you can also check out <span class="mention">#&#128640;user-creations</span></span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/174570823170916353/fb38197a109d7bf3d5d63562907b2d8a.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Mysticporo#9556" data-user-id="174570823170916353" style="color: rgb(159,213,80)">Mysticporo</span>
+
+
+        <span class="chatlog__timestamp">28-Nov-21 11:18 AM</span>
+
+            <div class="chatlog__message " data-message-id="914550768349102110" id="message-914550768349102110" title="Message sent: 28-Nov-21 11:18 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Eye Tracking highlighted Inspection Educational Application
+- <a href="https://twitter.com/Fonzi_Scheme/status/1464990313727025152?s=20">https://twitter.com/Fonzi_Scheme/status/1464990313727025152?s=20</a></span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/259745354004693004/2e325b801d98eaa86e041e7617fe1435.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="igster#9848" data-user-id="259745354004693004" style="color: rgb(231,76,60)">igster</span>
+
+
+        <span class="chatlog__timestamp">28-Nov-21 01:16 PM</span>
+
+            <div class="chatlog__message " data-message-id="914580645299224596" id="message-914580645299224596" title="Message sent: 28-Nov-21 01:16 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Neos isn&#39;t like any other crypto metaverse game, it&#39;s a metaverse engine, “The ETH of the Metaverse”, that enables people to build their own games, items and businesses. In future, we&#39;ll see Neos ecosystem evolve like Ethereum&#39;s over time where people build layers upon layers, connecting different user built systems/items/etc
+
+&quot;Craziest objects in Neos&quot;  - (shows what&#39;s possible in Neos and how much fun people are already having in it)
+- <a href="https://www.youtube.com/watch?v=H7tmBWGWMlc">https://www.youtube.com/watch?v=H7tmBWGWMlc</a>
+
+Visually impressive worlds created by a single Neos user
+- <a href="https://www.youtube.com/watch?v=e9nAISS5G1I">https://www.youtube.com/watch?v=e9nAISS5G1I</a>
+
+Be a star in action movie that&#39;s played out in live with real actors
+- <a href="https://www.youtube.com/watch?v=zOc9NH_4ZNA&t=1s">https://www.youtube.com/watch?v=zOc9NH_4ZNA&amp;t=1s</a>
+
+Among us recreated inside Neos by users
+- <a href="https://www.youtube.com/watch?v=pC0ANHSHt3Y">https://www.youtube.com/watch?v=pC0ANHSHt3Y</a>
+
+Import your Minecraft world to Neos!
+- <a href="https://www.youtube.com/watch?v=iGfN7XElq5U">https://www.youtube.com/watch?v=iGfN7XElq5U</a>
+
+Slot machine built inside NeosVR
+- <a href="https://twitter.com/nvrttxb777/status/1463447302610173952">https://twitter.com/nvrttxb777/status/1463447302610173952</a>
+
+NFT&#39;s integrated to NeosVR by player
+- <a href="https://www.youtube.com/watch?v=h-VxNrlIhRg">https://www.youtube.com/watch?v=h-VxNrlIhRg</a>
+
+Play DnD inside NeosVR in totally new way
+- <a href="https://www.youtube.com/watch?v=gB37OOKaqso">https://www.youtube.com/watch?v=gB37OOKaqso</a>
+
+Working slot machine inside Neos built by a player (uses kfc)
+-<a href="https://twitter.com/nvrttxb777/status/1463447302610173952">https://twitter.com/nvrttxb777/status/1463447302610173952</a>
+
+Metamask wallet integrated to Neos by a player:
+- <a href="https://youtu.be/d2yHndR2ZCE">https://youtu.be/d2yHndR2ZCE</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="29-Nov-21 04:58 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/93881276846579712/09bff56da66c9a180d6890db2a1e0b7a.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Turk#2971" data-user-id="93881276846579712" style="color: rgb(20,151,255)">Turk</span>
+
+
+        <span class="chatlog__timestamp">29-Nov-21 02:29 AM</span>
+
+            <div class="chatlog__message " data-message-id="914780195993575424" id="message-914780195993575424" title="Message sent: 29-Nov-21 02:29 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Here&#39;s a few others too to add will add more when I can remember, there&#39;s been alot over the years:
+
+Wacky Races Metaverse Meetup: <a href="https://www.youtube.com/watch?v=rdAx1a7EY3A">https://www.youtube.com/watch?v=rdAx1a7EY3A</a>
+
+MMD Videos in Neos: <a href="https://www.youtube.com/user/IDAWKYI">https://www.youtube.com/user/IDAWKYI</a>
+
+Dame Da Ne by Gourry/Wolfy: <a href="https://www.youtube.com/watch?v=0zN_Cahf10s&t=4s">https://www.youtube.com/watch?v=0zN_Cahf10s&amp;t=4s</a>
+
+Bhaptics Showcase: 
+<a href="https://www.youtube.com/watch?v=z2_ItxIEruQ">https://www.youtube.com/watch?v=z2_ItxIEruQ</a>
+<a href="https://www.youtube.com/watch?v=_MpS_c4JIS8&t=59s">https://www.youtube.com/watch?v=_MpS_c4JIS8&amp;t=59s</a> 
+
+Beat Syndicate Shows: <a href="https://twitter.com/queenhidari/status/1454136975116603392">https://twitter.com/queenhidari/status/1454136975116603392</a>
+
+IDA Dance Battles in Neos: <a href="https://www.twitch.tv/videos/1216807364">https://www.twitch.tv/videos/1216807364</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="29-Nov-21 02:33 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/582838460079931392/4fa2e0bd616b6b9c894b2758cc4fe8c8.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="DAWKY#0001" data-user-id="582838460079931392" style="color: rgb(20,151,255)">dawky</span>
+
+
+        <span class="chatlog__timestamp">29-Nov-21 04:24 AM</span>
+
+            <div class="chatlog__message " data-message-id="914809072539291658" id="message-914809072539291658" title="Message sent: 29-Nov-21 04:24 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://youtu.be/a-6stfngfOI">https://youtu.be/a-6stfngfOI</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UCoBxd7yGbarvxrZ-38xVJ1g">DAWKY</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=a-6stfngfOI">
+                                                        <div class="markdown preserve-whitespace">[KUROYU] Ten Thousand Stars [Neos VR]</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/a-6stfngfOI" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/174570823170916353/fb38197a109d7bf3d5d63562907b2d8a.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Mysticporo#9556" data-user-id="174570823170916353" style="color: rgb(159,213,80)">Mysticporo</span>
+
+
+        <span class="chatlog__timestamp">29-Nov-21 06:20 AM</span>
+
+            <div class="chatlog__message " data-message-id="914838332771553281" id="message-914838332771553281" title="Message sent: 29-Nov-21 06:20 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Minecraft imported into Neos by Frooxius
+- <a href="https://www.youtube.com/watch?v=iGfN7XElq5U">https://www.youtube.com/watch?v=iGfN7XElq5U</a></span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/160012603366703104/6d0891b91e9fc24ff3141d8a8e8c9a65.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="MattyK#8239" data-user-id="160012603366703104" style="color: rgb(20,151,255)">MattyK</span>
+
+
+        <span class="chatlog__timestamp">29-Nov-21 09:48 AM</span>
+
+            <div class="chatlog__message " data-message-id="914890451444719646" id="message-914890451444719646" title="Message sent: 29-Nov-21 09:48 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">If you wish to see the true meme and chaos potential of Neos;
+<a href="https://www.youtube.com/watch?v=wisB1dYlHRY">https://www.youtube.com/watch?v=wisB1dYlHRY</a>
+<em>You have been warned</em>.</span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UC6t6B4ajbw7d5P9lzP-AsCA">Engi</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=wisB1dYlHRY">
+                                                        <div class="markdown preserve-whitespace">NeosVR is very serious business</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/wisB1dYlHRY" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="Flame">
+                                <img class="emoji emoji--small" alt="Flame" src="https://cdn.discordapp.com/emojis/795235566047985685.png" loading="lazy">
+                                <span class="chatlog__reaction-count">2</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/160012603366703104/6d0891b91e9fc24ff3141d8a8e8c9a65.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="MattyK#8239" data-user-id="160012603366703104" style="color: rgb(20,151,255)">MattyK</span>
+
+
+        <span class="chatlog__timestamp">29-Nov-21 10:43 AM</span>
+
+            <div class="chatlog__message " data-message-id="914904420771328041" id="message-914904420771328041" title="Message sent: 29-Nov-21 10:43 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Here, have some content from my recordings.</span>
+
+                        </div>
+                    </div>
+
+                    <div class="chatlog__attachment " onclick="">
+
+                            <video class="chatlog__attachment-media" controls>
+                                <source src="https://cdn.discordapp.com/attachments/914531722509565981/914904412198154240/Neosvr_2021.11.23_-_22.15.34.02-1.mp4" alt="Video attachment" title="Video: Neosvr_2021.11.23_-_22.15.34.02-1.mp4 (3.96 MB)">
+                            </video>
+                    </div>
+                    <div class="chatlog__attachment " onclick="">
+
+                            <video class="chatlog__attachment-media" controls>
+                                <source src="https://cdn.discordapp.com/attachments/914531722509565981/914904412760199238/Neosvr_2021.11.23_-_22.51.14.03-1.mp4" alt="Video attachment" title="Video: Neosvr_2021.11.23_-_22.51.14.03-1.mp4 (2.38 MB)">
+                            </video>
+                    </div>
+                    <div class="chatlog__attachment " onclick="">
+
+                            <video class="chatlog__attachment-media" controls>
+                                <source src="https://cdn.discordapp.com/attachments/914531722509565981/914904413435478036/Neosvr_2021.08.28_-_00.04.16.01-1.mp4" alt="Video attachment" title="Video: Neosvr_2021.08.28_-_00.04.16.01-1.mp4 (11.21 MB)">
+                            </video>
+                    </div>
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="NEXU">
+                                <img class="emoji emoji--small" alt="NEXU" src="https://cdn.discordapp.com/emojis/610245822713430039.png" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/196714701042745345/76fe74941c7baccd066ae7e4e0f5856d.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="NatBard#5261" data-user-id="196714701042745345" style="color: rgb(26,188,156)">NatBard</span>
+
+
+        <span class="chatlog__timestamp">29-Nov-21 06:02 PM</span>
+
+            <div class="chatlog__message " data-message-id="915014852030902323" id="message-915014852030902323" title="Message sent: 29-Nov-21 06:02 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://youtu.be/60B6YU-Jszo">https://youtu.be/60B6YU-Jszo</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UCXw2AkpooAM-Hhg4Pwc0XqA">ORANGE channel</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=60B6YU-Jszo">
+                                                        <div class="markdown preserve-whitespace">【話題のメタバース】『Neos VR』って何？</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/60B6YU-Jszo" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="wiggle">
+                                <img class="emoji emoji--small" alt="wiggle" src="https://cdn.discordapp.com/emojis/794637259109695508.gif" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+            <div class="chatlog__message " data-message-id="915014915402649610" id="message-915014915402649610" title="Message sent: 29-Nov-21 06:02 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://www.youtube.com/watch?v=iv5woBHSkFA">https://www.youtube.com/watch?v=iv5woBHSkFA</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UCXw2AkpooAM-Hhg4Pwc0XqA">ORANGE channel</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=iv5woBHSkFA">
+                                                        <div class="markdown preserve-whitespace">Aerial Guardian 協力型VRFPS</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/iv5woBHSkFA" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="wiggle">
+                                <img class="emoji emoji--small" alt="wiggle" src="https://cdn.discordapp.com/emojis/794637259109695508.gif" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+            <div class="chatlog__message " data-message-id="915015670687756298" id="message-915015670687756298" title="Message sent: 29-Nov-21 06:05 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://youtu.be/ZLEaf3YwJy8">https://youtu.be/ZLEaf3YwJy8</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UCSqgStjL3gl_E-PKos0gkiA">Mystic Forge</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=ZLEaf3YwJy8">
+                                                        <div class="markdown preserve-whitespace">Cabin of The Seasons - Teaser Trailer</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/ZLEaf3YwJy8" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="thumbsup">
+                                <img class="emoji emoji--small" alt="&#128077;" src="https://twemoji.maxcdn.com/2/svg/1f44d.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                            <div class="chatlog__reaction" title="wiggle">
+                                <img class="emoji emoji--small" alt="wiggle" src="https://cdn.discordapp.com/emojis/794637259109695508.gif" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+            <div class="chatlog__message " data-message-id="915015983742193737" id="message-915015983742193737" title="Message sent: 29-Nov-21 06:06 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Also how is there not a link to Meta Movie yet? jeez (oh found it in igster&#39;s links, whatever updated trailer below)</span>
+
+                                <span class="chatlog__edited-timestamp" title="29-Nov-21 06:10 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="915016089648373811" id="message-915016089648373811" title="Message sent: 29-Nov-21 06:07 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://youtu.be/sUW0_nHz2bU">https://youtu.be/sUW0_nHz2bU</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UCn74c0tb4kyPOLsSUbtwx3A">TheMetaMovie</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=sUW0_nHz2bU">
+                                                        <div class="markdown preserve-whitespace">What is a MetaMovie? Our new :30 trailer!</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/sUW0_nHz2bU" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="ok_hand">
+                                <img class="emoji emoji--small" alt="&#128076;" src="https://twemoji.maxcdn.com/2/svg/1f44c.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                            <div class="chatlog__reaction" title="wiggle">
+                                <img class="emoji emoji--small" alt="wiggle" src="https://cdn.discordapp.com/emojis/794637259109695508.gif" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/86299039309516800/39c5b67756d6fe85116346656d686a3a.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Ru#0001" data-user-id="86299039309516800" style="">Ru</span>
+
+
+        <span class="chatlog__timestamp">30-Nov-21 10:25 AM</span>
+
+            <div class="chatlog__message " data-message-id="915262247369048114" id="message-915262247369048114" title="Message sent: 30-Nov-21 10:25 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://www.youtube.com/watch?v=pJ2IAJsElUY">https://www.youtube.com/watch?v=pJ2IAJsElUY</a>
+
+<span class="mention" title="Turk#2971">@Turk</span> REcent user video of Spooktoberfest.</span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UCbge-t4JT1Ty9c2YkS4FVUQ">smellsogood</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=pJ2IAJsElUY">
+                                                        <div class="markdown preserve-whitespace">VR Halloween Party Spooktoberfest 2021 at Neos VR</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/pJ2IAJsElUY" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="wiggle">
+                                <img class="emoji emoji--small" alt="wiggle" src="https://cdn.discordapp.com/emojis/794637259109695508.gif" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/93881276846579712/09bff56da66c9a180d6890db2a1e0b7a.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Turk#2971" data-user-id="93881276846579712" style="color: rgb(20,151,255)">Turk</span>
+
+
+        <span class="chatlog__timestamp">30-Nov-21 10:25 AM</span>
+
+            <div class="chatlog__message " data-message-id="915262320018591784" id="message-915262320018591784" title="Message sent: 30-Nov-21 10:25 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Aaay awesome <img loading="lazy" class="emoji " alt="pepoDrinkies" title="pepoDrinkies" src="https://cdn.discordapp.com/emojis/667826620492415004.png"></span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/297459128195088384/8a6c33d59dace2f11921ade71719538a.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="sirkitree#9737" data-user-id="297459128195088384" style="color: rgb(20,151,255)">sirkitree ⌬</span>
+
+
+        <span class="chatlog__timestamp">30-Nov-21 10:40 AM</span>
+
+            <div class="chatlog__message " data-message-id="915266031180738620" id="message-915266031180738620" title="Message sent: 30-Nov-21 10:40 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://www.youtube.com/watch?v=fpmRtRG2JRE">https://www.youtube.com/watch?v=fpmRtRG2JRE</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UCiXG83MUrF3tj5-3aLwikZw">BIOHAZRED</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=fpmRtRG2JRE">
+                                                        <div class="markdown preserve-whitespace">Building Halo in Neos VR</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/fpmRtRG2JRE" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="wiggle">
+                                <img class="emoji emoji--small" alt="wiggle" src="https://cdn.discordapp.com/emojis/794637259109695508.gif" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+            <div class="chatlog__message " data-message-id="915267128125440071" id="message-915267128125440071" title="Message sent: 30-Nov-21 10:44 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://youtu.be/oiZLWCzLMHM">https://youtu.be/oiZLWCzLMHM</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UCdq0nqlmKDANyAdzvk6lviQ">sirkitree</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=oiZLWCzLMHM">
+                                                        <div class="markdown preserve-whitespace">NeosVR://Audio Reactive Mandala</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/oiZLWCzLMHM" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="wiggle">
+                                <img class="emoji emoji--small" alt="wiggle" src="https://cdn.discordapp.com/emojis/794637259109695508.gif" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/160012603366703104/6d0891b91e9fc24ff3141d8a8e8c9a65.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="MattyK#8239" data-user-id="160012603366703104" style="color: rgb(20,151,255)">MattyK</span>
+
+
+        <span class="chatlog__timestamp">30-Nov-21 04:02 PM</span>
+
+            <div class="chatlog__message " data-message-id="915346988973850654" id="message-915346988973850654" title="Message sent: 30-Nov-21 04:02 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://twitter.com/Mattyrogue/status/1429465341634261002">https://twitter.com/Mattyrogue/status/1429465341634261002</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(29,161,242,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+                                                    <img class="chatlog__embed-author-icon" src="https://images-ext-2.discordapp.net/external/QRS6rXMmp-iMthkv5bYuoy-SwCTpI5tyf7wh9UR-DXM/https/pbs.twimg.com/profile_images/1344746380817002497/HpsUo2-7_bigger.jpg" alt="Author icon" loading="lazy" onerror="this.style.visibility='hidden'">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://twitter.com/Mattyrogue">MattyK (@Mattyrogue)</a>
+                                                    </span>
+                                            </div>
+
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">This is what a successful lap looks like with the same systems, on BEPUv2, still a significant step up in consistency, and lower velocity vehicles do not have the same issue. This one (AGRA Comet) was made to break barriers and can go up to 1204km/h (Just over Mach 1).
+#NeosVR <a href="https://t.co/6I4ATPiIjF">https://t.co/6I4ATPiIjF</a></div>
+                                            </div>
+
+                                    </div>
+
+                                        <div class="chatlog__embed-thumbnail-container">
+                                            <a class="chatlog__embed-thumbnail-link" href="https://images-ext-2.discordapp.net/external/WtCk0Vn5jH8AUFkYOOAognytRiWDuLHFC2YcaWF1cYs/https/pbs.twimg.com/ext_tw_video_thumb/1429464795288326148/pu/img/pAK3t-qn4RDCwtOs.jpg">
+                                                <img class="chatlog__embed-thumbnail" src="https://images-ext-2.discordapp.net/external/WtCk0Vn5jH8AUFkYOOAognytRiWDuLHFC2YcaWF1cYs/https/pbs.twimg.com/ext_tw_video_thumb/1429464795288326148/pu/img/pAK3t-qn4RDCwtOs.jpg" alt="Thumbnail" loading="lazy">
+                                            </a>
+                                        </div>
+                                </div>
+
+
+                                    <div class="chatlog__embed-footer">
+                                            <img class="chatlog__embed-footer-icon" src="https://images-ext-1.discordapp.net/external/bXJWV2Y_F3XSra_kEqIYXAAsI3m1meckfLhYuWzxIfI/https/abs.twimg.com/icons/apple-touch-icon-192x192.png" alt="Footer icon" loading="lazy">
+
+                                        <span class="chatlog__embed-footer-text">
+Twitter
+ • 
+22-Aug-21 11:27 AM                                        </span>
+                                    </div>
+                            </div>
+                        </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="wiggle">
+                                <img class="emoji emoji--small" alt="wiggle" src="https://cdn.discordapp.com/emojis/794637259109695508.gif" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+            <div class="chatlog__message " data-message-id="915347150555197470" id="message-915347150555197470" title="Message sent: 30-Nov-21 04:02 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://twitter.com/Mattyrogue/status/1428459662110859271">https://twitter.com/Mattyrogue/status/1428459662110859271</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(29,161,242,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+                                                    <img class="chatlog__embed-author-icon" src="https://images-ext-2.discordapp.net/external/QRS6rXMmp-iMthkv5bYuoy-SwCTpI5tyf7wh9UR-DXM/https/pbs.twimg.com/profile_images/1344746380817002497/HpsUo2-7_bigger.jpg" alt="Author icon" loading="lazy" onerror="this.style.visibility='hidden'">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://twitter.com/Mattyrogue">MattyK (@Mattyrogue)</a>
+                                                    </span>
+                                            </div>
+
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">This is Space Engine being reprojected via RTMP to a 360 Degree View in #NeosVR with less than five seconds delay, using Neos&#39; native Websockets to parse commands to Space Engine&#39;s own script console.
+
+This level of interoperability is what a Metaverse is supposed to be. <a href="https://t.co/9mf8s9PBwT">https://t.co/9mf8s9PBwT</a></div>
+                                            </div>
+
+                                    </div>
+
+                                        <div class="chatlog__embed-thumbnail-container">
+                                            <a class="chatlog__embed-thumbnail-link" href="https://images-ext-2.discordapp.net/external/Qxmu_yblbFfar5qJCJfttpbDMu2gyO7FjXmxwWpIAhg/https/pbs.twimg.com/ext_tw_video_thumb/1428456886370807812/pu/img/rVdLekUClV48Bi4c.jpg">
+                                                <img class="chatlog__embed-thumbnail" src="https://images-ext-2.discordapp.net/external/Qxmu_yblbFfar5qJCJfttpbDMu2gyO7FjXmxwWpIAhg/https/pbs.twimg.com/ext_tw_video_thumb/1428456886370807812/pu/img/rVdLekUClV48Bi4c.jpg" alt="Thumbnail" loading="lazy">
+                                            </a>
+                                        </div>
+                                </div>
+
+
+                                    <div class="chatlog__embed-footer">
+                                            <img class="chatlog__embed-footer-icon" src="https://images-ext-1.discordapp.net/external/bXJWV2Y_F3XSra_kEqIYXAAsI3m1meckfLhYuWzxIfI/https/abs.twimg.com/icons/apple-touch-icon-192x192.png" alt="Footer icon" loading="lazy">
+
+                                        <span class="chatlog__embed-footer-text">
+Twitter
+ • 
+19-Aug-21 04:51 PM                                        </span>
+                                    </div>
+                            </div>
+                        </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="wiggle">
+                                <img class="emoji emoji--small" alt="wiggle" src="https://cdn.discordapp.com/emojis/794637259109695508.gif" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+            <div class="chatlog__message " data-message-id="915347226543407175" id="message-915347226543407175" title="Message sent: 30-Nov-21 04:03 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://twitter.com/Mattyrogue/status/1427037722661773313">https://twitter.com/Mattyrogue/status/1427037722661773313</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(29,161,242,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+                                                    <img class="chatlog__embed-author-icon" src="https://images-ext-2.discordapp.net/external/QRS6rXMmp-iMthkv5bYuoy-SwCTpI5tyf7wh9UR-DXM/https/pbs.twimg.com/profile_images/1344746380817002497/HpsUo2-7_bigger.jpg" alt="Author icon" loading="lazy" onerror="this.style.visibility='hidden'">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://twitter.com/Mattyrogue">MattyK (@Mattyrogue)</a>
+                                                    </span>
+                                            </div>
+
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">Do you ever just turn your entire Cloud Home into a fully driveable racetrack from Hot Wheels: AcceleRacers. I blame @Aegis_The_Wolf. Just #NeosVR things.</div>
+                                            </div>
+
+                                    </div>
+
+                                </div>
+
+                                    <div class="chatlog__embed-image-container">
+                                        <a class="chatlog__embed-image-link" href="https://images-ext-1.discordapp.net/external/j0XJBwNFXgbjBkFmydBDb3YGMaFGxQiTISNq-piZUYE/https/pbs.twimg.com/media/E83a8F-WUAoMsYn.jpg%3Alarge">
+                                            <img class="chatlog__embed-image" src="https://images-ext-1.discordapp.net/external/j0XJBwNFXgbjBkFmydBDb3YGMaFGxQiTISNq-piZUYE/https/pbs.twimg.com/media/E83a8F-WUAoMsYn.jpg%3Alarge" alt="Image" loading="lazy">
+                                        </a>
+                                    </div>
+
+                                    <div class="chatlog__embed-footer">
+                                            <img class="chatlog__embed-footer-icon" src="https://images-ext-1.discordapp.net/external/bXJWV2Y_F3XSra_kEqIYXAAsI3m1meckfLhYuWzxIfI/https/abs.twimg.com/icons/apple-touch-icon-192x192.png" alt="Footer icon" loading="lazy">
+
+                                        <span class="chatlog__embed-footer-text">
+Twitter
+ • 
+15-Aug-21 06:41 PM                                        </span>
+                                    </div>
+                            </div>
+                        </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="wiggle">
+                                <img class="emoji emoji--small" alt="wiggle" src="https://cdn.discordapp.com/emojis/794637259109695508.gif" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/313142842895630336/12ce9c627e997d20635631a1790573b1.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="TheBasementNerd#3465" data-user-id="313142842895630336" style="color: rgb(26,188,156)">TheBasementNerd (she/her)</span>
+
+
+        <span class="chatlog__timestamp">30-Nov-21 04:31 PM</span>
+
+            <div class="chatlog__message " data-message-id="915354419883831407" id="message-915354419883831407" title="Message sent: 30-Nov-21 04:31 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://www.twitch.tv/videos/1219086300">https://www.twitch.tv/videos/1219086300</a>
+
+Not entirely something fantastically special that &quot;you can only do in Neos&quot;, but a demonstration of the capabilities of Neos for media production. All the camera setup, switching, the fire orb that I&#39;m dancing with, its particles, and the audio reactivity of the world (fireflies, torches, and plants in the water) were built and programmed in game by me. I find this is a good showcase of the effects that can be pulled off within Neos and the ease of access for them, as well as opening Neos to multiple use cases that VRC isn&#39;t very good for without very specific setups beforehand, whereas I edit all these values when I enter the world and just get going</span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.twitch.tv/videos/1219086300">
+                                                        <div class="markdown preserve-whitespace">Highlight: Dancing in NeosVR - thebasementnerd on Twitch</div>
+                                                    </a>
+                                            </div>
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">thebasementnerd went live on Twitch. Catch up on their Neos VR VOD now.</div>
+                                            </div>
+
+                                    </div>
+
+                                        <div class="chatlog__embed-thumbnail-container">
+                                            <a class="chatlog__embed-thumbnail-link" href="https://images-ext-2.discordapp.net/external/oEIHySPl-y0AkMuPkkvFzNA4XiSWChQ5uL5SmkUTJBQ/https/static-cdn.jtvnw.net/cf_vods/d1m7jfoe9zdc1j/9aac1da16c368d1c9475_thebasementnerd_65406618150_9553309645//thumb/thumb1219086300-640x360.jpg">
+                                                <img class="chatlog__embed-thumbnail" src="https://images-ext-2.discordapp.net/external/oEIHySPl-y0AkMuPkkvFzNA4XiSWChQ5uL5SmkUTJBQ/https/static-cdn.jtvnw.net/cf_vods/d1m7jfoe9zdc1j/9aac1da16c368d1c9475_thebasementnerd_65406618150_9553309645//thumb/thumb1219086300-640x360.jpg" alt="Thumbnail" loading="lazy">
+                                            </a>
+                                        </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="wiggle">
+                                <img class="emoji emoji--small" alt="wiggle" src="https://cdn.discordapp.com/emojis/794637259109695508.gif" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/196714701042745345/76fe74941c7baccd066ae7e4e0f5856d.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="NatBard#5261" data-user-id="196714701042745345" style="color: rgb(26,188,156)">NatBard</span>
+
+
+        <span class="chatlog__timestamp">01-Dec-21 11:29 AM</span>
+
+            <div class="chatlog__message " data-message-id="915640716154253312" id="message-915640716154253312" title="Message sent: 01-Dec-21 11:29 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://youtu.be/xnARUnXj5gg">https://youtu.be/xnARUnXj5gg</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UCcC0wnid10JOAEyIhV4M1Kg">IDA OFFICIAL</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=xnARUnXj5gg">
+                                                        <div class="markdown preserve-whitespace">IDA NeosVR  2020 dance video recap  (NeosFesta event)</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/xnARUnXj5gg" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="wiggle">
+                                <img class="emoji emoji--small" alt="wiggle" src="https://cdn.discordapp.com/emojis/794637259109695508.gif" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/160012603366703104/6d0891b91e9fc24ff3141d8a8e8c9a65.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="MattyK#8239" data-user-id="160012603366703104" style="color: rgb(20,151,255)">MattyK</span>
+
+
+        <span class="chatlog__timestamp">02-Dec-21 12:55 PM</span>
+
+            <div class="chatlog__message " data-message-id="916024779432132688" id="message-916024779432132688" title="Message sent: 02-Dec-21 12:55 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://twitter.com/Mattyrogue/status/1466465849225752604">https://twitter.com/Mattyrogue/status/1466465849225752604</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(29,161,242,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+                                                    <img class="chatlog__embed-author-icon" src="https://images-ext-2.discordapp.net/external/QRS6rXMmp-iMthkv5bYuoy-SwCTpI5tyf7wh9UR-DXM/https/pbs.twimg.com/profile_images/1344746380817002497/HpsUo2-7_bigger.jpg" alt="Author icon" loading="lazy" onerror="this.style.visibility='hidden'">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://twitter.com/Mattyrogue">MattyK (@Mattyrogue)</a>
+                                                    </span>
+                                            </div>
+
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">@MrBSN868 @neos_vr That is <em>not</em> #NeosVR, that&#39;s Space Pirate Trainer&#39;s Arena.
+<a href="https://t.co/ugWHn4arwv">https://t.co/ugWHn4arwv</a>
+
+However, this can be Neos; <a href="https://t.co/Y03AXI6jA3">https://t.co/Y03AXI6jA3</a></div>
+                                            </div>
+
+                                    </div>
+
+                                        <div class="chatlog__embed-thumbnail-container">
+                                            <a class="chatlog__embed-thumbnail-link" href="https://images-ext-1.discordapp.net/external/UiO-MPbHKZTbHC82H4M5-qus7cVrI5xGyCRa2CeR-PI/https/pbs.twimg.com/ext_tw_video_thumb/1466465761497595912/pu/img/j1WddFf3yaQv6yLF.jpg">
+                                                <img class="chatlog__embed-thumbnail" src="https://images-ext-1.discordapp.net/external/UiO-MPbHKZTbHC82H4M5-qus7cVrI5xGyCRa2CeR-PI/https/pbs.twimg.com/ext_tw_video_thumb/1466465761497595912/pu/img/j1WddFf3yaQv6yLF.jpg" alt="Thumbnail" loading="lazy">
+                                            </a>
+                                        </div>
+                                </div>
+
+
+                                    <div class="chatlog__embed-footer">
+                                            <img class="chatlog__embed-footer-icon" src="https://images-ext-1.discordapp.net/external/bXJWV2Y_F3XSra_kEqIYXAAsI3m1meckfLhYuWzxIfI/https/abs.twimg.com/icons/apple-touch-icon-192x192.png" alt="Footer icon" loading="lazy">
+
+                                        <span class="chatlog__embed-footer-text">
+Twitter
+ • 
+02-Dec-21 12:54 PM                                        </span>
+                                    </div>
+                            </div>
+                        </div>
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/386414397263970307/c1330868e885fb547e54ff28bf1ba16a.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Medra#4918" data-user-id="386414397263970307" style="color: rgb(255,0,230)">Medra</span>
+
+
+        <span class="chatlog__timestamp">04-Dec-21 01:07 AM</span>
+
+            <div class="chatlog__message " data-message-id="916571285679640666" id="message-916571285679640666" title="Message sent: 04-Dec-21 01:07 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Content drop:
+<a href="https://www.youtube.com/watch?v=JLPdZX-UvEU">https://www.youtube.com/watch?v=JLPdZX-UvEU</a>
+<a href="https://www.youtube.com/watch?v=YJRaMC_nufE">https://www.youtube.com/watch?v=YJRaMC_nufE</a>
+<a href="https://www.youtube.com/watch?v=iVcbid0dccA">https://www.youtube.com/watch?v=iVcbid0dccA</a>
+<a href="https://www.youtube.com/watch?v=-qRL2GYfXuk">https://www.youtube.com/watch?v=-qRL2GYfXuk</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UCXjo8niwZmHYkaqxH_4nEMg">Medra VR</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=JLPdZX-UvEU">
+                                                        <div class="markdown preserve-whitespace">Creator Jam Trailer - A Virtual Reality Open Source Worldbuilding M...</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/JLPdZX-UvEU" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UCkZBa3MMhXwpmoHkQIaVO7A">Creator Jam</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=YJRaMC_nufE">
+                                                        <div class="markdown preserve-whitespace">Creator Jam Wasteland</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/YJRaMC_nufE" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UCkZBa3MMhXwpmoHkQIaVO7A">Creator Jam</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=iVcbid0dccA">
+                                                        <div class="markdown preserve-whitespace">Build Battles Unnamed_Team_01_Game</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/iVcbid0dccA" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UCkZBa3MMhXwpmoHkQIaVO7A">Creator Jam</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=-qRL2GYfXuk">
+                                                        <div class="markdown preserve-whitespace">Creator Jam Karaoke</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/-qRL2GYfXuk" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/582838460079931392/4fa2e0bd616b6b9c894b2758cc4fe8c8.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="DAWKY#0001" data-user-id="582838460079931392" style="color: rgb(20,151,255)">dawky</span>
+
+
+        <span class="chatlog__timestamp">04-Dec-21 04:16 AM</span>
+
+            <div class="chatlog__message " data-message-id="916618891218800640" id="message-916618891218800640" title="Message sent: 04-Dec-21 04:16 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://youtu.be/ENrhNpdSCzg">https://youtu.be/ENrhNpdSCzg</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(255,0,0,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://www.youtube.com/channel/UCoBxd7yGbarvxrZ-38xVJ1g">DAWKY</a>
+                                                    </span>
+                                            </div>
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://www.youtube.com/watch?v=ENrhNpdSCzg">
+                                                        <div class="markdown preserve-whitespace">Bad Apple but it&#39;s on an oscilloscope in NEOS VR</div>
+                                                    </a>
+                                            </div>
+
+                                        <div class="chatlog__embed-youtube-container">
+                                            <iframe class="chatlog__embed-youtube" src="https://www.youtube.com/embed/ENrhNpdSCzg" width="400" height="225"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/82992971921752064/92ceb502c3122c646b650913d9668470.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="ProbablePrime#4895" data-user-id="82992971921752064" style="color: rgb(241,196,15)">ProbablePrime | Docs</span>
+
+
+        <span class="chatlog__timestamp">08-Dec-21 08:24 PM</span>
+
+            <div class="chatlog__message " data-message-id="918312212978860114" id="message-918312212978860114" title="Message sent: 08-Dec-21 08:24 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://twitter.com/ShortStackFVR/status/1468751549765541891">https://twitter.com/ShortStackFVR/status/1468751549765541891</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(29,161,242,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+                                                    <img class="chatlog__embed-author-icon" src="https://images-ext-1.discordapp.net/external/5YLWLc2dJcFLh5Wd9h3Z0gC8gvkdTiuo_8vY7oVZaMg/https/pbs.twimg.com/profile_images/1406516303590920192/MTlbzWvr_bigger.jpg" alt="Author icon" loading="lazy" onerror="this.style.visibility='hidden'">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://twitter.com/ShortStackFVR">ShortStackVR (@ShortStackFVR)</a>
+                                                    </span>
+                                            </div>
+
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">New video experiencing @bHaptics for the first time. Having Haptics is absolutely amazing in VR. Being able to feel the direction and different intensities is crazy. 
+
+Thanks @skeeva for showing me around @neos_vr! Neos is mind-blowing. VRChat on roids. 
+
+ <a href="https://t.co/5yhMe31TDU">https://t.co/5yhMe31TDU</a></div>
+                                            </div>
+
+                                    </div>
+
+                                </div>
+
+                                    <div class="chatlog__embed-image-container">
+                                        <a class="chatlog__embed-image-link" href="https://images-ext-2.discordapp.net/external/Rx5KlXn2nXBEdMqy0B4OIBJXl_SOJORv6lICzqCkYXQ/https/pbs.twimg.com/media/FGINv46WQAQdUb8.jpg%3Alarge">
+                                            <img class="chatlog__embed-image" src="https://images-ext-2.discordapp.net/external/Rx5KlXn2nXBEdMqy0B4OIBJXl_SOJORv6lICzqCkYXQ/https/pbs.twimg.com/media/FGINv46WQAQdUb8.jpg%3Alarge" alt="Image" loading="lazy">
+                                        </a>
+                                    </div>
+
+                                    <div class="chatlog__embed-footer">
+                                            <img class="chatlog__embed-footer-icon" src="https://images-ext-1.discordapp.net/external/bXJWV2Y_F3XSra_kEqIYXAAsI3m1meckfLhYuWzxIfI/https/abs.twimg.com/icons/apple-touch-icon-192x192.png" alt="Footer icon" loading="lazy">
+
+                                        <span class="chatlog__embed-footer-text">
+Twitter
+ • 
+08-Dec-21 08:17 PM                                        </span>
+                                    </div>
+                            </div>
+                        </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="918312574330740808" id="message-918312574330740808" title="Message sent: 08-Dec-21 08:26 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Several games featured here but Neos too</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/160012603366703104/6d0891b91e9fc24ff3141d8a8e8c9a65.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="MattyK#8239" data-user-id="160012603366703104" style="color: rgb(20,151,255)">MattyK</span>
+
+
+        <span class="chatlog__timestamp">10-Dec-21 08:40 AM</span>
+
+            <div class="chatlog__message " data-message-id="918859730863161387" id="message-918859730863161387" title="Message sent: 10-Dec-21 08:40 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://twitter.com/Mattyrogue/status/1428459662110859271">https://twitter.com/Mattyrogue/status/1428459662110859271</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(29,161,242,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+                                                    <img class="chatlog__embed-author-icon" src="https://images-ext-2.discordapp.net/external/QRS6rXMmp-iMthkv5bYuoy-SwCTpI5tyf7wh9UR-DXM/https/pbs.twimg.com/profile_images/1344746380817002497/HpsUo2-7_bigger.jpg" alt="Author icon" loading="lazy" onerror="this.style.visibility='hidden'">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://twitter.com/Mattyrogue">MattyK (@Mattyrogue)</a>
+                                                    </span>
+                                            </div>
+
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">This is Space Engine being reprojected via RTMP to a 360 Degree View in #NeosVR with less than five seconds delay, using Neos&#39; native Websockets to parse commands to Space Engine&#39;s own script console.
+
+This level of interoperability is what a Metaverse is supposed to be. <a href="https://t.co/9mf8s9PBwT">https://t.co/9mf8s9PBwT</a></div>
+                                            </div>
+
+                                    </div>
+
+                                        <div class="chatlog__embed-thumbnail-container">
+                                            <a class="chatlog__embed-thumbnail-link" href="https://images-ext-2.discordapp.net/external/Qxmu_yblbFfar5qJCJfttpbDMu2gyO7FjXmxwWpIAhg/https/pbs.twimg.com/ext_tw_video_thumb/1428456886370807812/pu/img/rVdLekUClV48Bi4c.jpg">
+                                                <img class="chatlog__embed-thumbnail" src="https://images-ext-2.discordapp.net/external/Qxmu_yblbFfar5qJCJfttpbDMu2gyO7FjXmxwWpIAhg/https/pbs.twimg.com/ext_tw_video_thumb/1428456886370807812/pu/img/rVdLekUClV48Bi4c.jpg" alt="Thumbnail" loading="lazy">
+                                            </a>
+                                        </div>
+                                </div>
+
+
+                                    <div class="chatlog__embed-footer">
+                                            <img class="chatlog__embed-footer-icon" src="https://images-ext-1.discordapp.net/external/bXJWV2Y_F3XSra_kEqIYXAAsI3m1meckfLhYuWzxIfI/https/abs.twimg.com/icons/apple-touch-icon-192x192.png" alt="Footer icon" loading="lazy">
+
+                                        <span class="chatlog__embed-footer-text">
+Twitter
+ • 
+19-Aug-21 04:51 PM                                        </span>
+                                    </div>
+                            </div>
+                        </div>
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/160012603366703104/6d0891b91e9fc24ff3141d8a8e8c9a65.png?size=128" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="MattyK#8239" data-user-id="160012603366703104" style="color: rgb(20,151,255)">MattyK</span>
+
+
+        <span class="chatlog__timestamp">10-Dec-21 04:49 PM</span>
+
+            <div class="chatlog__message " data-message-id="918982733399732285" id="message-918982733399732285" title="Message sent: 10-Dec-21 04:49 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://twitter.com/Mattyrogue/status/1469423644212449282">https://twitter.com/Mattyrogue/status/1469423644212449282</a></span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(29,161,242,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+                                                    <img class="chatlog__embed-author-icon" src="https://images-ext-2.discordapp.net/external/QRS6rXMmp-iMthkv5bYuoy-SwCTpI5tyf7wh9UR-DXM/https/pbs.twimg.com/profile_images/1344746380817002497/HpsUo2-7_bigger.jpg" alt="Author icon" loading="lazy" onerror="this.style.visibility='hidden'">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://twitter.com/Mattyrogue">MattyK (@Mattyrogue)</a>
+                                                    </span>
+                                            </div>
+
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">Despite the lack of an actual ingame marketplace and trustless systems to guarantee the exchange of goods or services, it&#39;s important to note that #NeosVR #metaverse still has a small economy that&#39;s using $NCR as it was intended; as fungible, legal tender for services and goods.</div>
+                                            </div>
+
+                                    </div>
+
+                                </div>
+
+                                    <div class="chatlog__embed-image-container">
+                                        <a class="chatlog__embed-image-link" href="https://images-ext-1.discordapp.net/external/6nrMIPOpKGjczT5BLaqhQh7Cnt73OZsFqQtjgA6WkbU/https/pbs.twimg.com/media/FGRthy2X0AE-fUB.jpg%3Alarge">
+                                            <img class="chatlog__embed-image" src="https://images-ext-1.discordapp.net/external/6nrMIPOpKGjczT5BLaqhQh7Cnt73OZsFqQtjgA6WkbU/https/pbs.twimg.com/media/FGRthy2X0AE-fUB.jpg%3Alarge" alt="Image" loading="lazy">
+                                        </a>
+                                    </div>
+
+                                    <div class="chatlog__embed-footer">
+                                            <img class="chatlog__embed-footer-icon" src="https://images-ext-1.discordapp.net/external/bXJWV2Y_F3XSra_kEqIYXAAsI3m1meckfLhYuWzxIfI/https/abs.twimg.com/icons/apple-touch-icon-192x192.png" alt="Footer icon" loading="lazy">
+
+                                        <span class="chatlog__embed-footer-text">
+Twitter
+ • 
+10-Dec-21 04:47 PM                                        </span>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+
+
+
+                                    </div>
+
+                                </div>
+
+                                    <div class="chatlog__embed-image-container">
+                                        <a class="chatlog__embed-image-link" href="https://images-ext-1.discordapp.net/external/PS57pVoL0xBWM37ezTmFTlXbsbTT5F0ruMTVPLP7zOg/https/pbs.twimg.com/media/FGRthy2XsAYxrWO.jpg%3Alarge">
+                                            <img class="chatlog__embed-image" src="https://images-ext-1.discordapp.net/external/PS57pVoL0xBWM37ezTmFTlXbsbTT5F0ruMTVPLP7zOg/https/pbs.twimg.com/media/FGRthy2XsAYxrWO.jpg%3Alarge" alt="Image" loading="lazy">
+                                        </a>
+                                    </div>
+
+                            </div>
+                        </div>
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+
+
+
+                                    </div>
+
+                                </div>
+
+                                    <div class="chatlog__embed-image-container">
+                                        <a class="chatlog__embed-image-link" href="https://images-ext-1.discordapp.net/external/QEmEdq5G8OTs_HI3embwxtI8UyDA7oJtej9KFCW2zLg/https/pbs.twimg.com/media/FGRthy2XoAE0KdE.jpg%3Alarge">
+                                            <img class="chatlog__embed-image" src="https://images-ext-1.discordapp.net/external/QEmEdq5G8OTs_HI3embwxtI8UyDA7oJtej9KFCW2zLg/https/pbs.twimg.com/media/FGRthy2XoAE0KdE.jpg%3Alarge" alt="Image" loading="lazy">
+                                        </a>
+                                    </div>
+
+                            </div>
+                        </div>
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+
+
+
+                                    </div>
+
+                                </div>
+
+                                    <div class="chatlog__embed-image-container">
+                                        <a class="chatlog__embed-image-link" href="https://images-ext-2.discordapp.net/external/XUD3XIDYAFEuZRIoPk0LBeHAFXvc4K1twGY_guUW1p0/https/pbs.twimg.com/media/FGRwwmXXMAM7tLE.jpg%3Alarge">
+                                            <img class="chatlog__embed-image" src="https://images-ext-2.discordapp.net/external/XUD3XIDYAFEuZRIoPk0LBeHAFXvc4K1twGY_guUW1p0/https/pbs.twimg.com/media/FGRwwmXXMAM7tLE.jpg%3Alarge" alt="Image" loading="lazy">
+                                        </a>
+                                    </div>
+
+                            </div>
+                        </div>
+
+            </div>
+    </div>
+</div>
+
+
+</div>
+
+<div class="postamble">
+    <div class="postamble__entry">Exported 30 message(s)</div>
+</div>
+
+</body>
+
+</html>
